@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:simple_api_app/home.dart';
 import 'package:simple_api_app/network/repository.dart';
 
 class LogInPage extends StatelessWidget {
@@ -13,8 +16,8 @@ class LogInPage extends StatelessWidget {
   Widget build(BuildContext context) {
      final formKey = GlobalKey<FormState>();
     
-       TextEditingController _emailController = TextEditingController();
-       TextEditingController _passwordController = TextEditingController();
+       TextEditingController emailController = TextEditingController();
+       TextEditingController passwordController = TextEditingController();
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: scaffoldKey,
@@ -33,14 +36,14 @@ class LogInPage extends StatelessWidget {
                       height: 70,
                     ),
                     const Text(
-                      "Create",
+                      "Login",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 24,
                           fontWeight: FontWeight.w700),
                     ),
                     const Text(
-                      "your account",
+                      "to your account",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 24,
@@ -51,7 +54,7 @@ class LogInPage extends StatelessWidget {
                     ),
                     //* Email
                     TextFormField(
-                      controller: _emailController,
+                      controller: emailController,
                       validator: (value) {
                         if (value!.isEmpty ||
                             !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
@@ -74,7 +77,7 @@ class LogInPage extends StatelessWidget {
                     ),
                     //* Password
                     TextFormField(
-                      controller: _passwordController,
+                      controller: passwordController,
                       obscureText: true,
                       validator: (value) {
                         if (value!.isEmpty ||
@@ -111,18 +114,23 @@ class LogInPage extends StatelessWidget {
                             backgroundColor:
                                 MaterialStatePropertyAll(Colors.black87),
                           ),
-                          onPressed: () {
+                          onPressed: ()async {
                             if (formKey.currentState!.validate()) {
-                              ApiRepository().registerUser(_emailController.text,
-                                  _passwordController.text);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text("Submitting form")));
+                               
+                               var response = await ApiRepository().loginWithEmailAndPawword(emailController.text, passwordController.text);
+                              if (response['status']) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                   SnackBar(
+                                      content: Text(response['message'].toString())));
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const HomePage()));
+                              }
+                             
                             }
                           },
                           child: const Center(
                               child: Text(
-                            "SIGN UP",
+                            "LOG IN",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,

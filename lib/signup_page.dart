@@ -23,6 +23,8 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
   }
 
+  void clear() {}
+
   final formKey = GlobalKey<FormState>();
 
   bool matchingPassword() {
@@ -35,6 +37,11 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    snackBar(String message) {
+      return ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message)));
+    }
+
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: scaffoldKey,
@@ -69,28 +76,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(
                       height: 40,
                     ),
-                    //* Name
-                    // TextFormField(
-                    //   controller: _nameController,
-                    //   validator: (value) {
-                    //     if (value!.isEmpty ||
-                    //         !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
-                    //       return "Enter Correct Name";
-                    //     } else {
-                    //       return null;
-                    //     }
-                    //   },
-                    //   decoration: const InputDecoration(
-                    //     hintText: "Enter Your Name",
-                    //     hintStyle: TextStyle(
-                    //       fontSize: 14,
-                    //       fontWeight: FontWeight.w400,
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
                     //* Email
                     TextFormField(
                       controller: _emailController,
@@ -139,26 +124,26 @@ class _SignUpPageState extends State<SignUpPage> {
                       height: 20,
                     ),
                     //*Confirm Password
-                    // TextFormField(
-                    //   controller: _confirmPasswordController,
-                    //   obscureText: true,
-                    //   validator: (value) {
-                    //     if (value!.isEmpty) {
-                    //       return "please re-enter your password";
-                    //     } else if (matchingPassword()) {
-                    //       return "Your password didn't match";
-                    //     } else {
-                    //       return null;
-                    //     }
-                    //   },
-                    //   decoration: const InputDecoration(
-                    //     hintText: "Confirm password",
-                    //     hintStyle: TextStyle(
-                    //       fontSize: 14,
-                    //       fontWeight: FontWeight.w400,
-                    //     ),
-                    //   ),
-                    // ),
+                    TextFormField(
+                      controller: _confirmPasswordController,
+                      obscureText: true,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "please re-enter your password";
+                        } else if (matchingPassword()) {
+                          return "Your password didn't match";
+                        } else {
+                          return null;
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        hintText: "Confirm password",
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -174,16 +159,19 @@ class _SignUpPageState extends State<SignUpPage> {
                             backgroundColor:
                                 MaterialStatePropertyAll(Colors.black87),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                              ApiRepository().registerUser(
-                                  _emailController.text,
-                                  _passwordController.text);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text("Submitting form")));
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const LogInPage()));
+                              var apiResponse = await ApiRepository()
+                                  .registerUser(_emailController.text,
+                                      _passwordController.text);
+                              if (!apiResponse['status']) {
+                                snackBar(apiResponse['message']);
+                              } else {
+                                snackBar(apiResponse['message']);
+                                // ignore: use_build_context_synchronously
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const LogInPage()));
+                              }
                             }
                           },
                           child: const Center(
@@ -195,103 +183,39 @@ class _SignUpPageState extends State<SignUpPage> {
                                 fontSize: 16),
                           )),
                         )),
-                    // child: GestureDetector(
-                    //   onTap: () {
-                    //     print("clicked");
-                    //   },
-                    //   child: Container(
-                    //     width: 147,
-                    //     height: 51,
-                    //     // alignment: Alignment.center,
-                    //     decoration: BoxDecoration(
-                    //         color: const Color(0xff2D201C),
-                    //         borderRadius: BorderRadius.circular(30)),
-                    //     child: const Center(
-                    //         child: Text(
-                    //       "SIGN UP",
-                    //       style: TextStyle(
-                    //           color: Colors.white,
-                    //           fontWeight: FontWeight.w700,
-                    //           fontSize: 16),
-                    //     )),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
-              const Column(
+               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  // const Center(
-                  //     child: Text(
-                  //   "or sign up with",
-                  //   style: TextStyle(color: Colors.black, fontSize: 12),
-                  // )),
-                  // const SizedBox(
-                  //   height: 20,
-                  // ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Padding(
-                  //       padding: const EdgeInsets.only(left: 0),
-                  //       child: Container(
-                  //         width: 42,
-                  //         height: 42,
-                  //         decoration: BoxDecoration(
-                  //             shape: BoxShape.circle,
-                  //             border:
-                  //                 Border.all(color: const Color(0xffE2E0DF))),
-                  //         child: Center(
-                  //           child: Image.asset(
-                  //             "assets/images/apple.png",
-                  //             width: 22,
-                  //             height: 22,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     Padding(
-                  //       padding: const EdgeInsets.only(left: 20),
-                  //       child: Container(
-                  //         width: 42,
-                  //         height: 42,
-                  //         decoration: BoxDecoration(
-                  //             shape: BoxShape.circle,
-                  //             border:
-                  //                 Border.all(color: const Color(0xffE2E0DF))),
-                  //         child: Center(
-                  //           child: Image.asset(
-                  //             "assets/images/google.png",
-                  //             width: 22,
-                  //             height: 22,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Already have account?",
                         style: TextStyle(color: Colors.black, fontSize: 14),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          "Log In",
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: Colors.black,
-                              fontSize: 14),
+                      InkWell(
+                        onTap: (){
+                          Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const LogInPage()));
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            "Log In",
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.black,
+                                fontSize: 14),
+                          ),
                         ),
                       ),
                     ],
