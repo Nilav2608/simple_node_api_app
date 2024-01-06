@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:simple_api_app/home.dart';
-import 'package:simple_api_app/network/repository.dart';
+import 'package:simple_api_app/Repository/repository.dart';
 
 class LogInPage extends StatelessWidget {
   const LogInPage({super.key});

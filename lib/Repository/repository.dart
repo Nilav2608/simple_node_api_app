@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:simple_api_app/network/configs.dart';
+import 'package:simple_api_app/Network/configs.dart';
 
 class ApiRepository {
   Future registerUser(String email, String password) async {
