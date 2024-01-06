@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:simple_api_app/home.dart';
+import 'package:simple_api_app/view/home.dart';
 import 'package:simple_api_app/Repository/repository.dart';
 
 class LogInPage extends StatelessWidget {
