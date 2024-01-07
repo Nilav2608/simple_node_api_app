@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:simple_api_app/view/login_page.dart';
-import 'package:simple_api_app/Repository/repository.dart';
+import 'package:simple_api_app/Repository/api_repository.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+  final VoidCallback showLoginPage;
+  const SignUpPage({super.key, required this.showLoginPage});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -23,7 +23,18 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
   }
 
-  void clear() {}
+  @override
+  void initState() {
+    clear();
+    super.initState();
+  }
+
+  void clear() {
+    _nameController.clear();
+    _emailController.clear();
+    _passwordController.clear();
+    _confirmPasswordController.clear();
+  }
 
   final formKey = GlobalKey<FormState>();
 
@@ -169,8 +180,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               } else {
                                 snackBar(apiResponse['message']);
                                 // ignore: use_build_context_synchronously
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const LogInPage()));
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //     builder: (context) => const LogInPage(showRegisterPage: () {  },)));
                               }
                             }
                           },
@@ -186,7 +197,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ],
                 ),
               ),
-               Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(
@@ -203,10 +214,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         style: TextStyle(color: Colors.black, fontSize: 14),
                       ),
                       InkWell(
-                        onTap: (){
-                          Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const LogInPage()));
-                        },
+                        onTap: widget.showLoginPage,
                         child: const Padding(
                           padding: EdgeInsets.only(left: 8.0),
                           child: Text(

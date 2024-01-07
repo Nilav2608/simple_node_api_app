@@ -1,23 +1,36 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:simple_api_app/view/home.dart';
-import 'package:simple_api_app/Repository/repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_api_app/Repository/api_repository.dart';
 
-class LogInPage extends StatelessWidget {
-  const LogInPage({super.key});
+class LogInPage extends StatefulWidget {
+  final VoidCallback showRegisterPage;
+  const LogInPage({super.key, required this.showRegisterPage});
 
+  @override
+  State<LogInPage> createState() => _LogInPageState();
+}
 
+class _LogInPageState extends State<LogInPage> {
+  late SharedPreferences prefs;
 
- 
+  @override
+  void initState() {
+    initSharedPrefs();
+    super.initState();
+  }
 
+  void initSharedPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   @override
   Widget build(BuildContext context) {
-     final formKey = GlobalKey<FormState>();
-    
-       TextEditingController emailController = TextEditingController();
-       TextEditingController passwordController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: scaffoldKey,
@@ -114,18 +127,20 @@ class LogInPage extends StatelessWidget {
                             backgroundColor:
                                 MaterialStatePropertyAll(Colors.black87),
                           ),
-                          onPressed: ()async {
+                          onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                               
-                               var response = await ApiRepository().loginWithEmailAndPawword(emailController.text, passwordController.text);
+                              var response = await ApiRepository()
+                                  .loginWithEmailAndPawword(
+                                      emailController.text,
+                                      passwordController.text);
                               if (response['status']) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                   SnackBar(
-                                      content: Text(response['message'].toString())));
-                                      Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const HomePage()));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            response['message'].toString())));
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //     builder: (context) => const HomePage()));
                               }
-                             
                             }
                           },
                           child: const Center(
@@ -140,30 +155,33 @@ class LogInPage extends StatelessWidget {
                   ],
                 ),
               ),
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Already have account?",
                         style: TextStyle(color: Colors.black, fontSize: 14),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          "Log In",
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              color: Colors.black,
-                              fontSize: 14),
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: InkWell(
+                          onTap: widget.showRegisterPage,
+                          child: const Text(
+                            "Log In",
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: Colors.black,
+                                fontSize: 14),
+                          ),
                         ),
                       ),
                     ],
@@ -177,7 +195,3 @@ class LogInPage extends StatelessWidget {
     );
   }
 }
-
-
-
-
