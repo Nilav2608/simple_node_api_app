@@ -15,13 +15,7 @@ TextEditingController _passwordController = TextEditingController();
 TextEditingController _confirmPasswordController = TextEditingController();
 
 class _SignUpPageState extends State<SignUpPage> {
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+ 
 
   @override
   void initState() {

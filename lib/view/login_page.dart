@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_api_app/Repository/api_repository.dart';
+import 'package:simple_api_app/view/home.dart';
 
 class LogInPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -134,12 +135,21 @@ class _LogInPageState extends State<LogInPage> {
                                       emailController.text,
                                       passwordController.text);
                               if (response['status']) {
+                                String mytoken = response['token'];
+                                prefs.setString('token', mytoken);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content: Text(
                                             response['message'].toString())));
-                                // Navigator.of(context).push(MaterialPageRoute(
-                                //     builder: (context) => const HomePage()));
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            HomePage(mytoken: mytoken)));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            response['message'].toString())));
                               }
                             }
                           },
@@ -176,7 +186,7 @@ class _LogInPageState extends State<LogInPage> {
                         child: InkWell(
                           onTap: widget.showRegisterPage,
                           child: const Text(
-                            "Log In",
+                            "Sing up",
                             style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 color: Colors.black,

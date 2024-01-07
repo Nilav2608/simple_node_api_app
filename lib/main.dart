@@ -26,7 +26,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:  (token == null && JwtDecoder.isExpired(token.toString())==false)? const LandingPage() : HomePage(mytoken: token.toString())
+      routes: {
+        '/landingPage': (context)=> const LandingPage(),
+      },
+      home:  (token != null && JwtDecoder.isExpired(token.toString()) == false)?HomePage(mytoken: token.toString()) : const LandingPage()
     );
   }
 }
