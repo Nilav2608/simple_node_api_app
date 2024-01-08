@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simple_api_app/Repository/api_repository.dart';
+import 'package:simple_api_app/Repository/api_repository_impls.dart';
 
 class SignUpPage extends StatefulWidget {
   final VoidCallback showLoginPage;
