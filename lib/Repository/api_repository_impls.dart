@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:simple_api_app/Network/configs.dart';
+import 'package:simple_api_app/Repository/user_repository.dart';
 
-class ApiRepository {
+class ApiRepository implements UserRepository {
+  @override
   Future registerUser(String email, String password) async {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
@@ -19,10 +21,11 @@ class ApiRepository {
         throw "someting went wrong";
       }
     } catch (e) {
-      return e;
+      return {"status": false, "message": e.toString()};
     }
   }
 
+  @override
   Future loginWithEmailAndPawword(String email, String password) async {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
@@ -34,6 +37,9 @@ class ApiRepository {
         var results = jsonDecode(response.body);
         return results;
       }
-    } catch (e) {}
+      // ignore: empty_catches
+    } catch (e) {
+      return {"status": false, "message": e.toString()};
+    }
   }
 }
