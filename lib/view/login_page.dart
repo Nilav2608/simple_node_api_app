@@ -2,12 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_api_app/AuthPageBloc/auth_page_bloc.dart';
 import 'package:simple_api_app/Repository/api_repository_impls.dart';
 import 'package:simple_api_app/view/home.dart';
 
 class LogInPage extends StatefulWidget {
-  final VoidCallback showRegisterPage;
-  const LogInPage({super.key, required this.showRegisterPage});
+  final VoidCallback showSingUpPage;
+  const LogInPage({
+    super.key,
+    required this.showSingUpPage,
+  });
 
   @override
   State<LogInPage> createState() => _LogInPageState();
@@ -184,7 +188,7 @@ class _LogInPageState extends State<LogInPage> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: InkWell(
-                          onTap: widget.showRegisterPage,
+                          onTap: widget.showSingUpPage,
                           child: const Text(
                             "Sing up",
                             style: TextStyle(

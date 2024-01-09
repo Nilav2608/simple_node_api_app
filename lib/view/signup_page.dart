@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:simple_api_app/AuthPageBloc/auth_page_bloc.dart';
 import 'package:simple_api_app/Repository/api_repository_impls.dart';
 
 class SignUpPage extends StatefulWidget {
   final VoidCallback showLoginPage;
-  const SignUpPage({super.key, required this.showLoginPage});
+  const SignUpPage({super.key, required this.showLoginPage
+});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -15,8 +17,6 @@ TextEditingController _passwordController = TextEditingController();
 TextEditingController _confirmPasswordController = TextEditingController();
 
 class _SignUpPageState extends State<SignUpPage> {
- 
-
   @override
   void initState() {
     clear();
@@ -173,9 +173,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 snackBar(apiResponse['message']);
                               } else {
                                 snackBar(apiResponse['message']);
-                                // ignore: use_build_context_synchronously
-                                // Navigator.of(context).push(MaterialPageRoute(
-                                //     builder: (context) => const LogInPage(showRegisterPage: () {  },)));
+                                // widget.bloc.add(ShowLoginPageEvent());
                               }
                             }
                           },
