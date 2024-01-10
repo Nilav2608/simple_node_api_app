@@ -3,9 +3,8 @@ import 'package:simple_api_app/AuthPageBloc/auth_page_bloc.dart';
 import 'package:simple_api_app/Repository/api_repository_impls.dart';
 
 class SignUpPage extends StatefulWidget {
-  final VoidCallback showLoginPage;
-  const SignUpPage({super.key, required this.showLoginPage
-});
+  final AuthPageBloc bloc;
+  const SignUpPage({super.key, required this.bloc});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -173,7 +172,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 snackBar(apiResponse['message']);
                               } else {
                                 snackBar(apiResponse['message']);
-                                // widget.bloc.add(ShowLoginPageEvent());
+                                widget.bloc.add(ShowLoginPageEvent());
                               }
                             }
                           },
@@ -206,7 +205,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         style: TextStyle(color: Colors.black, fontSize: 14),
                       ),
                       InkWell(
-                        onTap: widget.showLoginPage,
+                        onTap: () {
+                          widget.bloc.add(ShowLoginPageEvent());
+                        },
                         child: const Padding(
                           padding: EdgeInsets.only(left: 8.0),
                           child: Text(

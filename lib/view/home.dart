@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_api_app/AuthPageBloc/auth_page_bloc.dart';
 
 class HomePage extends StatefulWidget {
   final String mytoken;
@@ -22,6 +23,12 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  final AuthPageBloc bloc = AuthPageBloc();
+
+  logOut() {
+    Navigator.of(context).pushReplacementNamed('/landingPage');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,8 +39,8 @@ class _HomePageState extends State<HomePage> {
           IconButton(
               onPressed: () async {
                 await prefs.remove('token');
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pushReplacementNamed('/landingPage');
+
+                logOut();
               },
               icon: const Icon(Icons.login_rounded))
         ],

@@ -7,10 +7,10 @@ import 'package:simple_api_app/Repository/api_repository_impls.dart';
 import 'package:simple_api_app/view/home.dart';
 
 class LogInPage extends StatefulWidget {
-  final VoidCallback showSingUpPage;
+  final AuthPageBloc bloc;
   const LogInPage({
     super.key,
-    required this.showSingUpPage,
+    required this.bloc,
   });
 
   @override
@@ -188,7 +188,9 @@ class _LogInPageState extends State<LogInPage> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: InkWell(
-                          onTap: widget.showSingUpPage,
+                          onTap: () {
+                            widget.bloc.add(ShowRegisterPageEvent());
+                          },
                           child: const Text(
                             "Sing up",
                             style: TextStyle(

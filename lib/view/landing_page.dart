@@ -17,7 +17,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   void initState() {
     super.initState();
-    authPageBloc.add(ShowRegisterPageEvent());
+    authPageBloc.add(AuthPaegInitalEvent());
   }
 
   @override
@@ -25,23 +25,19 @@ class _LandingPageState extends State<LandingPage> {
     return BlocConsumer<AuthPageBloc, AuthPageState>(
       bloc: authPageBloc,
       listenWhen: (previous, current) => current is AuthPageActionState,
-      buildWhen: (previous, current) => current is! AuthPageActionState,
+      buildWhen: (previous, current) => current is AuthPageActionState,
       listener: (context, state) {},
       builder: (context, state) {
         switch (state.runtimeType) {
           case ShowLogInPageActionState:
             return Scaffold(
               body: LogInPage(
-                showSingUpPage: () {
-                authPageBloc.add(ShowRegisterPageEvent());
-              }),
+                bloc: authPageBloc,
+              ),
             );
           case ShowRegisterPageActionState:
             return SignUpPage(
-              showLoginPage: () {
-                authPageBloc.add(ShowLoginPageEvent());
-              }
-               
+              bloc: authPageBloc,
             );
         }
         return const SizedBox();

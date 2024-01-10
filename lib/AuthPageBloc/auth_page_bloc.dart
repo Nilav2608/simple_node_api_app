@@ -8,6 +8,7 @@ part 'auth_page_state.dart';
 
 class AuthPageBloc extends Bloc<AuthPageEvent, AuthPageState> {
   AuthPageBloc() : super(AuthPageInitial()) {
+    on<AuthPaegInitalEvent>(authPageInitalEvent);
     on<ShowLoginPageEvent>(showLoginPageEvent);
     on<ShowRegisterPageEvent>(showRegisterPageEvent);
   }
@@ -19,7 +20,10 @@ class AuthPageBloc extends Bloc<AuthPageEvent, AuthPageState> {
 
   FutureOr<void> showRegisterPageEvent(
       ShowRegisterPageEvent event, Emitter<AuthPageState> emit) {
-    print("register page event triggered");
+    emit(ShowRegisterPageActionState());
+  }
+
+  FutureOr<void> authPageInitalEvent(AuthPaegInitalEvent event, Emitter<AuthPageState> emit) {
     emit(ShowRegisterPageActionState());
   }
 }
