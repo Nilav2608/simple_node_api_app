@@ -9,18 +9,15 @@ class TodoRepository implements ITodoRepository {
   @override
   Future<Map<String, dynamic>> getUserNotes(String uid) async {
     try {
-      if (uid.isNotEmpty) {
-        var response = await http.post(
+      var response = await http.post(
           Uri.parse("${url}users/getAllNotes"),
           headers: {"content-type":"application/json"},
           body: jsonEncode({"id": uid}),
         );
-        print("called in repo");
-        print(
-          jsonEncode({"id": uid}),
-        );
-        var results = jsonDecode(response.body);
-        return results;
+      if (response.statusCode == 200) {
+          var results = jsonDecode(response.body);
+          return results;
+        
       } else {
         throw "User Id is empty";
       }
