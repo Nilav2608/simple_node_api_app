@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:simple_api_app/Network/configs.dart';
-import 'package:simple_api_app/Repository/user_repository.dart';
+import 'package:simple_api_app/Repository/UserRepository/user_repository.interface.dart';
 
-class ApiRepository implements UserRepository {
+class UserRepository implements IUserRepository {
   @override
   Future registerUser(String email, String password) async {
     try {

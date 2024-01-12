@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:simple_api_app/AuthPageBloc/auth_page_bloc.dart';
-import 'package:simple_api_app/Repository/api_repository_impls.dart';
+import 'package:simple_api_app/Repository/UserRepository/user_repository.dart';
 
 class SignUpPage extends StatefulWidget {
   final AuthPageBloc bloc;
@@ -165,7 +165,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                              var apiResponse = await ApiRepository()
+                              var apiResponse = await UserRepository()
                                   .registerUser(_emailController.text,
                                       _passwordController.text);
                               if (!apiResponse['status']) {

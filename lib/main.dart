@@ -29,7 +29,12 @@ class MyApp extends StatelessWidget {
       routes: {
         '/landingPage': (context)=> const LandingPage(),
       },
-      home:  (token != null && JwtDecoder.isExpired(token.toString()) == false)?HomePage(mytoken: token.toString()) : const LandingPage()
+      home:  (token != null && JwtDecoder.isExpired(token.toString()) == false)
+      // JwtDecoder.isExpired(token.toString()) == false
+      ? HomePage(mytoken: token.toString())
+      : const LandingPage()
     );
   }
 }
+//65a156f884155d771b2366de
+//65a156f884155d771b2366de

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_api_app/AuthPageBloc/auth_page_bloc.dart';
-import 'package:simple_api_app/Repository/api_repository_impls.dart';
+import 'package:simple_api_app/Repository/UserRepository/user_repository.dart';
 import 'package:simple_api_app/view/home.dart';
 
 class LogInPage extends StatefulWidget {
@@ -134,7 +134,7 @@ class _LogInPageState extends State<LogInPage> {
                           ),
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                              var response = await ApiRepository()
+                              var response = await UserRepository()
                                   .loginWithEmailAndPawword(
                                       emailController.text,
                                       passwordController.text);
