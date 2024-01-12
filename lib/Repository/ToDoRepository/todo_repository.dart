@@ -10,14 +10,13 @@ class TodoRepository implements ITodoRepository {
   Future<Map<String, dynamic>> getUserNotes(String uid) async {
     try {
       var response = await http.post(
-          Uri.parse("${url}users/getAllNotes"),
-          headers: {"content-type":"application/json"},
-          body: jsonEncode({"id": uid}),
-        );
+        Uri.parse(getAllNotesUrl),
+        headers: {"content-type": "application/json"},
+        body: jsonEncode({"id": uid}),
+      );
       if (response.statusCode == 200) {
-          var results = jsonDecode(response.body);
-          return results;
-        
+        var results = jsonDecode(response.body);
+        return results;
       } else {
         throw "User Id is empty";
       }
@@ -27,9 +26,21 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> addNote(String uid) async {
-    // TODO: implement deleteNote
-    throw UnimplementedError();
+  Future<Map<String, dynamic>> addNote(
+      String uid, String title, String des) async {
+    try {
+      var response = await http.post(Uri.parse("${url}users/$uid/todos"),
+          headers: {"content-type": "application/json"},
+          body: jsonEncode({"title": title, "description": des}));
+      if (response.statusCode == 201) {
+        var results = jsonDecode(response.body);
+        return results;
+      } else {
+        throw "unable to add note";
+      }
+    } catch (e) {
+      return {"status": false, "message": e.toString()};
+    }
   }
 
   @override
