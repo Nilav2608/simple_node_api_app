@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simple_api_app/AuthPageBloc/auth_page_bloc.dart';
 import 'package:simple_api_app/view/login_page.dart';
 import 'package:simple_api_app/view/signup_page.dart';
+
+import '../BusinssLogic/AuthPageBloc/auth_page_bloc.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);

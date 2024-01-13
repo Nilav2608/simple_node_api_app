@@ -1,14 +1,14 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:simple_api_app/Network/configs.dart';
-
 import 'package:simple_api_app/Repository/ToDoRepository/todo_repository.interface.dart';
+import '../../models/note_model.dart';
 
 class TodoRepository implements ITodoRepository {
   @override
-  Future<Map<String, dynamic>> getUserNotes(String uid) async {
+  Future<List<NoteModel>> getUserNotes(String uid) async {
     try {
+      List<NoteModel> currentList = [];
       var response = await http.post(
         Uri.parse(getAllNotesUrl),
         headers: {"content-type": "application/json"},
@@ -16,12 +16,17 @@ class TodoRepository implements ITodoRepository {
       );
       if (response.statusCode == 200) {
         var results = jsonDecode(response.body);
-        return results;
+        var fetchedNotes = results['data'];
+        for (int i = 0; i < fetchedNotes.length; i++) {
+          NoteModel notes = NoteModel.fromJson(fetchedNotes[i]);
+          currentList.add(notes);
+        }
+        return currentList;
       } else {
         throw "User Id is empty";
       }
     } catch (e) {
-      return {"status": false, "message": e.toString()};
+      return [];
     }
   }
 

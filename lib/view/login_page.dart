@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_api_app/AuthPageBloc/auth_page_bloc.dart';
 import 'package:simple_api_app/Repository/UserRepository/user_repository.dart';
 import 'package:simple_api_app/view/home.dart';
+
+import '../BusinssLogic/AuthPageBloc/auth_page_bloc.dart';
 
 class LogInPage extends StatefulWidget {
   final AuthPageBloc bloc;
