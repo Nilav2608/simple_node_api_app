@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:simple_api_app/AuthPageBloc/auth_page_bloc.dart';
 import 'package:simple_api_app/Repository/UserRepository/user_repository.dart';
+
+import '../BusinssLogic/AuthPageBloc/auth_page_bloc.dart';
 
 class SignUpPage extends StatefulWidget {
   final AuthPageBloc bloc;

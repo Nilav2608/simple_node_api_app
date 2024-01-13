@@ -1,38 +1,51 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:simple_api_app/Network/configs.dart';
-
 import 'package:simple_api_app/Repository/ToDoRepository/todo_repository.interface.dart';
+import '../../models/note_model.dart';
 
 class TodoRepository implements ITodoRepository {
   @override
-  Future<Map<String, dynamic>> getUserNotes(String uid) async {
+  Future<List<NoteModel>> getUserNotes(String uid) async {
     try {
-      if (uid.isNotEmpty) {
-        var response = await http.post(
-          Uri.parse("${url}users/getAllNotes"),
-          headers: {"content-type":"application/json"},
-          body: jsonEncode({"id": uid}),
-        );
-        print("called in repo");
-        print(
-          jsonEncode({"id": uid}),
-        );
+      List<NoteModel> currentList = [];
+      var response = await http.post(
+        Uri.parse(getAllNotesUrl),
+        headers: {"content-type": "application/json"},
+        body: jsonEncode({"id": uid}),
+      );
+      if (response.statusCode == 200) {
         var results = jsonDecode(response.body);
-        return results;
+        var fetchedNotes = results['data'];
+        for (int i = 0; i < fetchedNotes.length; i++) {
+          NoteModel notes = NoteModel.fromJson(fetchedNotes[i]);
+          currentList.add(notes);
+        }
+        return currentList;
       } else {
         throw "User Id is empty";
       }
     } catch (e) {
-      return {"status": false, "message": e.toString()};
+      return [];
     }
   }
 
   @override
-  Future<Map<String, dynamic>> addNote(String uid) async {
-    // TODO: implement deleteNote
-    throw UnimplementedError();
+  Future<Map<String, dynamic>> addNote(
+      String uid, String title, String des) async {
+    try {
+      var response = await http.post(Uri.parse("${url}users/$uid/todos"),
+          headers: {"content-type": "application/json"},
+          body: jsonEncode({"title": title, "description": des}));
+      if (response.statusCode == 201) {
+        var results = jsonDecode(response.body);
+        return results;
+      } else {
+        throw "unable to add note";
+      }
+    } catch (e) {
+      return {"status": false, "message": e.toString()};
+    }
   }
 
   @override

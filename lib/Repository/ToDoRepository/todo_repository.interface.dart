@@ -1,6 +1,8 @@
+import 'package:simple_api_app/models/note_model.dart';
+
 abstract class ITodoRepository {
-  Future<Map<String, dynamic>> getUserNotes(String uid);
-  Future<Map<String, dynamic>> addNote(String uid);
+  Future<List<NoteModel>> getUserNotes(String uid);
+  Future<Map<String, dynamic>> addNote(String uid,String title,String des);
   Future<Map<String, dynamic>> updateNote(String uid,String noteID);
   Future<Map<String, dynamic>> deleteNote(String uid,String noteId);
 }
