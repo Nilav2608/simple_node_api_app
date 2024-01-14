@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_api_app/BusinssLogic/HomePageBloc/home_bloc.dart';
-import 'package:simple_api_app/view/add_note.dart';
+import 'package:simple_api_app/view/addUpdateNote.dart';
 
 class HomePage extends StatefulWidget {
   final String mytoken;
@@ -54,11 +54,11 @@ class _HomePageState extends State<HomePage> {
       body: BlocConsumer<HomeBloc, HomeState>(
         bloc: homeBloc,
         listenWhen: (current, previous) => current is HomeActionState,
-        buildWhen: (current, previous) => current is !HomeActionState,
+        buildWhen: (current, previous) => current is! HomeActionState,
         listener: (context, state) {
           // switch (state.runtimeType) {
           //   case HomeNavigateToAddNotePage:
-             
+
           //     break;
           //   default:
           // }
@@ -75,9 +75,26 @@ class _HomePageState extends State<HomePage> {
                   var note = successState.notesList[index];
                   return Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: ListTile(
-                      title: Text(note.title ?? ""),
-                      subtitle: Text(note.description ?? ""),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => AddOrUpdateNote(
+                                  bloc: homeBloc,
+                                  userId: userId,
+                                  initialNote: note,
+                                )));
+                      },
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              12.0), // Set the desired border radius here
+                        ),
+                        child: ListTile(
+                          // tileColor: Colors.grey.shade400,
+                          title: Text(note.title ?? ""),
+                          subtitle: Text(note.description ?? ""),
+                        ),
+                      ),
                     ),
                   );
                 },
@@ -90,11 +107,11 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-           Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => AddNotePage(
-                        userId: userId,
-                        bloc: homeBloc,
-                      )));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => AddOrUpdateNote(
+                    userId: userId,
+                    bloc: homeBloc,
+                  )));
         },
         child: const Icon(Icons.add),
       ),

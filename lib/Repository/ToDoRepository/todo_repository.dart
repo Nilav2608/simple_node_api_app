@@ -55,8 +55,33 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> updateNote(String uid, String noteID) {
-    // TODO: implement updateNote
-    throw UnimplementedError();
+  Future<Map<String, dynamic>> updateNote(
+      String uid, NoteModel updatedNote) async {
+    try {
+      var formatedBody = jsonEncode(NoteModel(
+              title: updatedNote.title,
+              description: updatedNote.description,
+              date: updatedNote.date,
+              completed: false)
+          .toJson());
+      var response = await http.put(
+          Uri.parse("${url}users/$uid/updateNote/${updatedNote.id}"),
+          headers: {"content-type": "application/json"},
+          body: formatedBody);
+      if (response.statusCode == 200) {
+        var results = jsonDecode(response.body);
+        return results;
+      } else if (response.statusCode == 400) {
+        var results = jsonDecode(response.body);
+        return results;
+      } else if (response.statusCode == 404) {
+        var results = jsonDecode(response.body);
+        return results;
+      } else {
+        throw "Error occurd";
+      }
+    } catch (e) {
+      return {"status": false, "message": e.toString()};
+    }
   }
 }

@@ -24,4 +24,20 @@ class NoteModel {
     data['createdAt'] = date;
     return data;
   }
+
+  NoteModel copyWith({
+    String? id,
+    String? title,
+    String? description,
+    bool? completed,
+    String? date,
+  }) {
+    return NoteModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      completed: completed ?? this.completed,
+      date: date ?? this.date,
+    );
+  }
 }

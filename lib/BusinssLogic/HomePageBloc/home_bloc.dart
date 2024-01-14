@@ -12,6 +12,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
     on<HomeInitialGetNotesEvent>(homeInitialGetNotesEvent);
     on<AddNoteEvent>(addNoteEvent);
+    on<UpdateNoteEvent>(updateNoteEvent);
   }
 
   FutureOr<void> homeInitialGetNotesEvent(
@@ -25,9 +26,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       AddNoteEvent event, Emitter<HomeState> emit) async {
     emit(HomeLoadingState());
     if (event.userId.isNotEmpty) {
-      var resluts = await TodoRepository().addNote(event.userId,
+      var apiResults = await TodoRepository().addNote(event.userId,
           event.note.title.toString(), event.note.description.toString());
-      if (resluts["status"]) {
+      if (apiResults["status"]) {
+        var notesData = await TodoRepository().getUserNotes(event.userId);
+        emit(HomeFetchingSuccessState(notesList: notesData));
+      }
+    }
+  }
+
+  FutureOr<void> updateNoteEvent(
+      UpdateNoteEvent event, Emitter<HomeState> emit) async {
+    print("event triggered");
+    if (event.userId.isNotEmpty) {
+      
+      var apiResults =
+          await TodoRepository().updateNote(event.userId, event.updatedNote);
+      print(apiResults);
+      if (apiResults['status']) {
         var notesData = await TodoRepository().getUserNotes(event.userId);
         emit(HomeFetchingSuccessState(notesList: notesData));
       }

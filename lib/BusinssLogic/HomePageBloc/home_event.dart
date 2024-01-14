@@ -13,9 +13,14 @@ class AddNoteEvent extends HomeEvent {
   final String userId;
   final NoteModel note;
 
-  AddNoteEvent( {required this.userId,required this.note});
+  AddNoteEvent({required this.userId, required this.note});
 }
 
-class UpdateNoteEvent extends HomeEvent {}
+class UpdateNoteEvent extends HomeEvent {
+  final String userId;
+  final NoteModel updatedNote;
+
+  UpdateNoteEvent({required this.userId, required this.updatedNote});
+}
 
 class DeleteNoteEvent extends HomeEvent {}
