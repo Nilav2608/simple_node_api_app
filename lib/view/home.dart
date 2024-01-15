@@ -93,6 +93,12 @@ class _HomePageState extends State<HomePage> {
                           // tileColor: Colors.grey.shade400,
                           title: Text(note.title ?? ""),
                           subtitle: Text(note.description ?? ""),
+                          trailing: IconButton(
+                              onPressed: () {
+                                homeBloc.add(DeleteNoteEvent(
+                                    userId: userId, noteId: note.id ?? ''));
+                              },
+                              icon: const Icon(Icons.delete)),
                         ),
                       ),
                     ),
@@ -100,7 +106,26 @@ class _HomePageState extends State<HomePage> {
                 },
               );
 
-            default:
+            case HomeLoadedErrorState:
+             final successState = state as HomeLoadedErrorState;
+              return AlertDialog(
+                title: const Text('Server Error'),
+                content:  SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Text(successState.errorMessage),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
           }
           return const SizedBox();
         },

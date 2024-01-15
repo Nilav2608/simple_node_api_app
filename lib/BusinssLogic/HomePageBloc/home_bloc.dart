@@ -13,6 +13,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeInitialGetNotesEvent>(homeInitialGetNotesEvent);
     on<AddNoteEvent>(addNoteEvent);
     on<UpdateNoteEvent>(updateNoteEvent);
+    on<DeleteNoteEvent>(deleteNoteEvent);
   }
 
   FutureOr<void> homeInitialGetNotesEvent(
@@ -31,21 +32,38 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (apiResults["status"]) {
         var notesData = await TodoRepository().getUserNotes(event.userId);
         emit(HomeFetchingSuccessState(notesList: notesData));
+      }else{
+        emit(HomeLoadedErrorState(errorMessage: "Server Error occurd"));
       }
     }
   }
 
   FutureOr<void> updateNoteEvent(
       UpdateNoteEvent event, Emitter<HomeState> emit) async {
-    print("event triggered");
-    if (event.userId.isNotEmpty) {
-      
+    if (event.userId.isNotEmpty && event.updatedNote.title!.isNotEmpty) {
+      emit(HomeLoadingState());
       var apiResults =
           await TodoRepository().updateNote(event.userId, event.updatedNote);
-      print(apiResults);
       if (apiResults['status']) {
         var notesData = await TodoRepository().getUserNotes(event.userId);
         emit(HomeFetchingSuccessState(notesList: notesData));
+      }else{
+        emit(HomeLoadedErrorState(errorMessage: "Server Error occurd"));
+      }
+    }
+  }
+
+  FutureOr<void> deleteNoteEvent(
+      DeleteNoteEvent event, Emitter<HomeState> emit) async {
+    if (event.userId.isNotEmpty && event.noteId.isNotEmpty) {
+      var apiResults =
+          await TodoRepository().deleteNote(event.userId, event.noteId);
+
+      if (apiResults['status']) {
+        var notesData = await TodoRepository().getUserNotes(event.userId);
+        emit(HomeFetchingSuccessState(notesList: notesData));
+      } else {
+        emit(HomeLoadedErrorState(errorMessage: "Server Error occurd"));
       }
     }
   }

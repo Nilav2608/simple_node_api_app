@@ -49,9 +49,23 @@ class TodoRepository implements ITodoRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> deleteNote(String uid, String noteId) {
-    // TODO: implement deleteNote
-    throw UnimplementedError();
+  Future<Map<String, dynamic>> deleteNote(String uid, String noteId) async {
+    try {
+      var response =
+          await http.delete(Uri.parse("${url}users/$uid/deleteNote/$noteId"));
+
+      var results = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return results;
+      } else if (response.statusCode == 400) {
+        return results;
+      } else {
+        throw "An internal Eroor occurd";
+      }
+    } catch (e) {
+      return {"status": false, "message": e.toString()};
+    }
   }
 
   @override
