@@ -61,7 +61,8 @@ class _AddOrUpdateNoteState extends State<AddOrUpdateNote> {
           child: FloatingActionButton(
             onPressed: () async {
               if (isUpdateMode) {
-                widget.bloc.add(UpdateNoteEvent(
+                if(titleController.text.isNotEmpty){
+                  widget.bloc.add(UpdateNoteEvent(
                     userId: widget.userId ?? '',
                     updatedNote: widget.initialNote!.copyWith(
                         id: widget.initialNote!.id,
@@ -69,9 +70,13 @@ class _AddOrUpdateNoteState extends State<AddOrUpdateNote> {
                         description: descriptionController.text,
                         completed: widget.initialNote!.completed,
                         date: DateTime.now().toString())));
-                Navigator.of(context).pop();    
+                Navigator.of(context).pop();  
+                }else{
+                  Navigator.of(context).pop();
+                }  
               } else {
-                widget.bloc.add(AddNoteEvent(
+                if(titleController.text.isNotEmpty){
+                  widget.bloc.add(AddNoteEvent(
                     userId: widget.userId.toString(),
                     note: NoteModel(
                         title: titleController.text,
@@ -79,6 +84,9 @@ class _AddOrUpdateNoteState extends State<AddOrUpdateNote> {
                         completed: false,
                         date: DateTime.now().toString())));
                 Navigator.of(context).pop();
+                }else{
+                  Navigator.of(context).pop();
+                }
               }
             },
             shape: RoundedRectangleBorder(

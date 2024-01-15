@@ -15,8 +15,12 @@ class HomeFetchingSuccessState extends HomeState {
   HomeFetchingSuccessState({required this.notesList});
 }
 
-class HomeLoadedErrorState extends HomeState{}
+class HomeLoadedErrorState extends HomeActionState {
+  final String errorMessage;
 
-class HomeNavigateToAddNotePage extends HomeActionState{}
+  HomeLoadedErrorState({required this.errorMessage});
+}
 
-class HomeNavigateToEditNotePage extends HomeActionState{}
+class HomeNavigateToAddNotePage extends HomeActionState {}
+
+class HomeNavigateToEditNotePage extends HomeActionState {}
